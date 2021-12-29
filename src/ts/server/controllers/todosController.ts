@@ -42,9 +42,40 @@ export class TodosController {
         })
     }
 
-    updateTodo = (req: any,res: any) => {
+    displayTodos = (req: any,res: any) => {
 
-        return res.send("Successfull update.");
+        const db = new sqlite3.Database(dbName, (error: any) => {
+            
+            // Handle db connection errors.
+            if(error) {
+                console.log("DB connection error: " + error);
+            }else {
+                
+                // Prepare display query.
+                console.log("Connected to database.");
+                const query = "SELECT * FROM TODO_TABLE"
+                // Run query.
+                db.all(query, (error: any, result: any) => {
+                    
+                    // Handle display errors.
+                    if(error) {
+                        console.log("DB ERROR: " + error);
+                        console.log("Sending reponse...");
+                        res.status(400).send(JSON.stringify({
+                            Message: "An error occurred when fetching todos."
+                        }));
+                    }else {
+                        console.log("Todos successfully fetched.");
+                        console.log("Sending reponse...");
+                        res.status(200).send(JSON.stringify({
+                            Message: "Todos successfully fetched.",
+                            Todos: JSON.stringify( {result} )
+                        }));
+                    }
+                });
+            }
+        })
+
     }
 
     deleteTodo = (req: any,res: any) => {

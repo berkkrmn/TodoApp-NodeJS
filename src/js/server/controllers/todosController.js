@@ -42,8 +42,37 @@ class TodosController {
                 }
             });
         };
-        this.updateTodo = (req, res) => {
-            return res.send("Successfull update.");
+        this.displayTodos = (req, res) => {
+            const db = new sqlite3_1.default.Database(dbName, (error) => {
+                // Handle db connection errors.
+                if (error) {
+                    console.log("DB connection error: " + error);
+                }
+                else {
+                    // Prepare display query.
+                    console.log("Connected to database.");
+                    const query = "SELECT * FROM TODO_TABLE";
+                    // Run query.
+                    db.all(query, (error, result) => {
+                        // Handle display errors.
+                        if (error) {
+                            console.log("DB ERROR: " + error);
+                            console.log("Sending reponse...");
+                            res.status(400).send(JSON.stringify({
+                                Message: "An error occurred when fetching todos."
+                            }));
+                        }
+                        else {
+                            console.log("Todos successfully fetched.");
+                            console.log("Sending reponse...");
+                            res.status(200).send(JSON.stringify({
+                                Message: "Todos successfully fetched.",
+                                Todos: JSON.stringify({ result })
+                            }));
+                        }
+                    });
+                }
+            });
         };
         this.deleteTodo = (req, res) => {
             return res.send("Successfull create.");

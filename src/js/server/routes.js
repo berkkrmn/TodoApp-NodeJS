@@ -13,10 +13,11 @@ function serverRoutes(server) {
         console.log("Request: " + JSON.stringify(req.body));
         var controller = new todosController_1.TodosController().createTodo(req, res);
     });
-    // Create todo - endpoint.
-    server.get("/api/update", (req, res) => {
-        console.log(req.body);
-        var controller = new todosController_1.TodosController().updateTodo(req, res);
+    // Display todos - endpoint.
+    server.get("/api/display", (req, res) => {
+        console.log("Routing to controller: Display");
+        console.log("Request: " + JSON.stringify(req.body));
+        var controller = new todosController_1.TodosController().displayTodos(req, res);
     });
 }
 exports.serverRoutes = serverRoutes;
